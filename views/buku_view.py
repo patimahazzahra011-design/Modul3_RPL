@@ -12,6 +12,7 @@ class BukuView(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)  # Kolom Kiri (Form)
         self.grid_columnconfigure(1, weight=2)  # Kolom Kanan (Tabel lebih lebar)
         self.grid_rowconfigure(0, weight=1)
+
         #======================================
         # FRAME KIRI: FORMULIR INPUT BUKU
         #======================================
@@ -33,6 +34,14 @@ class BukuView(ctk.CTk):
         # Tombol Aksi
         self.btn_simpan = ctk.CTkButton(self.frame_kiri, text="Simpan Data", fg_color="green")
         self.btn_simpan.pack(pady=20, padx=15, fill="x")
+
+        # MODIFIKASI TUGAS 1: Menambahkan Tombol Update dan Delete 
+        self.btn_update = ctk.CTkButton(self.frame_kiri, text="Perbarui Data (Update)", fg_color="blue")
+        self.btn_update.pack(pady=10, padx=15, fill="x")
+
+        self.btn_delete = ctk.CTkButton(self.frame_kiri, text="Hapus Data (Delete)", fg_color="red")
+        self.btn_delete.pack(pady=10, padx=15, fill="x")
+
 
         #======================================
         # FRAME KANAN: TABEL DAFTAR BUKU
