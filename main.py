@@ -1,6 +1,5 @@
-# Patimah azzahra_006
-from controllers.buku_controller import BukuController
+from controllers.auth_controller import AuthController
 
 if __name__ == "__main__":
-    app = BukuController()
+    app = AuthController()
     app.run()
