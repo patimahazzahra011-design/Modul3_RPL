@@ -35,3 +35,5 @@ class AuthController:
 
     def run(self):
         self.view.mainloop()
+
+        

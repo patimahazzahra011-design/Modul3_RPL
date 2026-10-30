@@ -28,11 +28,17 @@ class BukuController:
            self.view.entry_judul.configure(state="disabled")
            self.view.entry_penulis.configure(state="disabled")
            self.view.entry_tahun.configure(state="disabled")
+        # Penguncian tombol Update dan Delete khusus untuk non-admin (anggota)
+           self.view.btn_update.configure(state="disabled")
+           self.view.btn_delete.configure(state="disabled")
         
-        # >>> TAMBAH 2 : binding tombol Hapus, Perbarui, dan klik baris tabel
+        # >>> TAMBAHAN m 7: binding tombol Hapus, Perbarui, dan klik baris tabel
         self.view.btn_delete.configure(command=self.hapus_data)
         self.view.btn_update.configure(command=self.perbarui_data)
         self.view.tabel.bind("<<TreeviewSelect>>", self.pilih_baris)
+
+        # >>> TAMBAH (TUGAS M 7): Binding tombol Logout di View dengan fungsi logout
+        self.view.btn_logout.configure(command=self.logout)
 
         # Memuat data ke tabel saat aplikasi pertama kali dibuka
         self.muat_data_tabel()
@@ -95,8 +101,14 @@ class BukuController:
         else:
             messagebox.showerror("Error", "Gagal menyimpan data.")
 
+
     # >>> TAMBAH 5 (awal): fungsi hapus_data
     def hapus_data(self):
+        # Proteksi ganda di level Controller
+        if self.user_role != "admin":
+            messagebox.showerror("Akses Ditolak", "Anda tidak memiliki izin untuk menghapus data!")
+            return
+        
         if not self.id_terpilih:
             messagebox.showwarning("Peringatan", "Pilih data pada tabel yang akan dihapus!")
             return
@@ -117,8 +129,15 @@ class BukuController:
         else:
             messagebox.showerror("Error", "Terjadi kesalahan saat menghapus data.")
 
+
+
     # >>> TAMBAH 6 (awal): fungsi perbarui_data
     def perbarui_data(self):
+        # Proteksi ganda di level Controller
+        if self.user_role != "admin":
+            messagebox.showerror("Akses Ditolak", "Anda tidak memiliki izin untuk memperbarui data!")
+            return
+    
         if not self.id_terpilih:
             messagebox.showwarning("Peringatan", "Pilih data pada tabel yang akan diperbarui!")
             return
@@ -143,6 +162,26 @@ class BukuController:
             self.muat_data_tabel()
         else:
             messagebox.showerror("Error", "Terjadi kesalahan saat memperbarui data.")
+
+    # >>> TAMBAH (TUGAS M 7): Fungsi untuk menangani aksi tombol Logout
+    def logout(self):
+        if not messagebox.askyesno("Konfirmasi", "Apakah Anda yakin ingin keluar/logout?"):
+            return
+            
+        # Menutup jendela BukuView saat ini
+        self.view.destroy()
+        
+        # Membuka kembali jendela LoginView melalui main.py atau pemanggilan langsung
+        try:
+            from views.login_view import LoginView
+            from controllers.auth_controller import AuthController
+            
+            login_view = LoginView()
+            auth_controller = AuthController()
+            auth_controller.run()
+
+        except Exception as e:
+            print(f"Error saat membuka login: {e}")
     
     # Fungsi untuk menyalakan aplikasi
     def run(self):
